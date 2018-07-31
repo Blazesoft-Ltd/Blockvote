@@ -1,0 +1,209 @@
+      <div id="content">
+        <div class="page-head">
+          <h2 class="page-head-title">Add New Poll Wizard</h2>
+          <nav aria-label="breadcrumb" role="navigation">
+            <ol class="breadcrumb page-head-nav">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="elections.html">Polls</a></li>
+              <li class="breadcrumb-item active">Add New</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="main-content container-fluid">
+          <div id="feedback"></div>
+          <div class="row wizard-row">
+            <div class="col-md-12 fuelux">
+              <div class="block-wizard">
+                <div id="wizard1" class="wizard wizard-ux">
+                  <div class="steps-container">
+                    <ul class="steps">
+                      <li data-step="1" class="active">Step 1<span class="chevron"></span></li>
+                      <li data-step="2">Step 2<span class="chevron"></span></li>
+                      <li data-step="3">Step 3<span class="chevron"></span></li>
+                      <li data-step="4">Finish<span class="chevron"></span></li>
+                    </ul>
+                  </div>
+                  <div class="actions">
+                    <button type="button" class="btn btn-xs btn-prev btn-secondary"><i class="icon mdi mdi-chevron-left"></i>  Prev</button>
+                    <button type="button" data-last="Finish" class="btn btn-xs btn-next btn-secondary" disabled>Next<i class="icon mdi mdi-chevron-right"></i></button>
+                  </div>
+                  <div class="step-content">
+                    <div data-step="1" class="step-pane active">
+                      <div class="container p-0">
+                        <form action="javascript:" data-parsley-namespace="data-parsley-" data-parsley-validate="" novalidate="" data-attr-action="addElection" class="form-horizontal group-border-dashed">
+                          <div class="form-group row">
+                            <div class="col-sm-7">
+                              <h3 class="wizard-title">Create a New Poll</h3>
+                            </div>
+                          </div>
+                          <div id="selectPoll" class="form-group row pt-1 pb-1">
+                            <label class="col-12 col-sm-3 col-form-label text-sm-right">Type</label>
+                            <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">
+                              <label class="custom-control custom-radio custom-control-inline">
+                                <input value="elections" class="custom-control-input" type="radio" name="poll-type" checked=""><span class="custom-control-label">Opinion poll</span>
+                              </label>
+                              <label class="custom-control custom-radio custom-control-inline">
+                                <input value="polls" class="custom-control-input" type="radio" name="poll-type"><span class="custom-control-label">Election</span>
+                              </label>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">Title</label>
+                            <div class="col-12 col-sm-6 col-lg-6">
+                              <input id="pollTitle" type="text" placeholder="Type the poll title" class="form-control" required>
+                              <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="col-sm-3">
+                              <button type="submit" class="btn btn-space btn-success btn-xl">Create</button>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <div class="col-sm-12">
+                              <button data-wizard="#wizard1" class="btn btn-primary btn-space wizard-next" disabled>Next Step</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    <div data-step="2" class="step-pane">
+                      <div class="container p-0">
+                        <form id="" action="javascript:" data-parsley-namespace="data-parsley-" data-parsley-validate="" novalidate="" data-attr-action="addPosition" class="form-horizontal group-border-dashed">
+                          <div class="form-group row">
+                            <div class="col-sm-7">
+                              <h3 class="wizard-title">Add Positions</h3>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">Position Name</label>
+                            <div class="col-12 col-lg-6">
+                              <input id="positionTitle" type="text" placeholder="Type the position" class="form-control" required>
+                              <input type="hidden" id="electionAddress">
+                            </div>
+                            <div class="col-sm-3">
+                              <button type="submit" class="btn btn-space btn-success btn-xl">Add</button>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <div class="col-sm-6">
+                              <h4>Positions</h4>
+                            </div>
+                          </div>
+                          <div class="form-group row align-items-center">
+                            <div id="postionList" class="col-sm-6">
+                              <div class="alert alert-warning alert-icon alert-icon-colored alert-dismissible" role="alert"><div class="icon"><span class="mdi mdi-alert-triangle"></span></div><div class="message"><button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button><strong>Sorrry!</strong> There is nothing to show here.</div></div>
+                              <ol></ol>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <div class=" col-sm-12">
+                              <button data-wizard="#wizard1" class="btn btn-secondary btn-space wizard-previous">Previous</button>
+                              <button data-wizard="#wizard1" class="btn btn-primary btn-space wizard-next" disabled>Next Step</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    <div data-step="3" class="step-pane">
+                        <div class="form-group row">
+                          <div class="col-sm-7">
+                            <h3 class="wizard-title">Add Candidates</h3>
+                          </div>
+                        </div>
+                        <div class="form-group row align-items-center">
+                          <div class="col-sm-10">
+                            <form action="javascript:" data-parsley-namespace="data-parsley-" data-parsley-validate="" novalidate="" data-attr-action="addCandidate" class="form-horizontal group-border-dashed">
+                              <div class="form-group row">
+                                <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">Name</label>
+                                <div class="col-12 col-sm-8 col-lg-6">
+                                  <input id="candidateName" type="text" placeholder="Type name of candidate" class="form-control" required>
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">Position</label>
+                                <div class="col-12 col-sm-8 col-lg-6">
+                                  <input id="candidatePosition" type="text" placeholder="Type position" class="form-control" required>
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <div class="offset-sm-3 col-sm-9">
+                                  <button type="submit" class="btn btn-success btn-xl"><i class="icon icon-left mdi mdi-plus"></i> Add</button>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <div class="col-sm-8">
+                            <div class="card card-table">
+                              <div class="card-header">Candidates</div>
+                              <div id="candidateList" class="card-body">
+                                <div class="alert alert-warning alert-icon alert-icon-colored alert-dismissible" role="alert"><div class="icon"><span class="mdi mdi-alert-triangle"></span></div><div class="message"><button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button><strong>Sorrry!</strong> There is nothing to show here.</div></div>
+                                <table class="table table-sm table-striped" style="display: none;">
+                                  <thead>
+                                    <tr>
+                                      <th>Name</th>
+                                      <th>Position</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <div class="col-sm-12">
+                            <button data-wizard="#wizard1" class="btn btn-secondary btn-space wizard-previous">Previous</button>
+                            <button data-wizard="#wizard1" class="btn btn-primary btn-space wizard-next" disabled>Next Step</button>
+                          </div>
+                        </div>
+                    </div>
+                    <div data-step="4" class="step-pane">
+                      <form action="javascript:" data-parsley-namespace="data-parsley-" data-parsley-validate="" novalidate="" class="form-horizontal group-border-dashed">
+                        <!--<div class="form-group row">
+                          <div class="col-sm-7">
+                            <h3 class="wizard-title">Preview</h3>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">Start</label>
+                          <div class="col-12 col-sm-8 col-lg-6">
+                            <div data-min-view="2" data-date-format="yyyy-mm-dd" class="input-group date datetimepicker">
+                              <input size="16" type="text" value="" class="form-control">
+                              <div class="input-group-append">
+                                <button class="btn btn-primary"><i class="icon-th mdi mdi-calendar"></i></button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">End</label>
+                          <div class="col-12 col-sm-8 col-lg-6">
+                            <div data-min-view="2" data-date-format="yyyy-mm-dd" class="input-group date datetimepicker">
+                              <input size="16" type="text" value="" class="form-control">
+                              <div class="input-group-append">
+                                <button class="btn btn-primary"><i class="icon-th mdi mdi-calendar"></i></button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>-->
+                        <div class="form-group row">
+                          <div class="offset-sm-3 col-sm-9">
+                            <button class="btn btn-success btn-xl">Finish</button>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <div class="col-sm-12">
+                            <button data-wizard="#wizard1" class="btn btn-secondary btn-space wizard-previous">Previous</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>                   
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>

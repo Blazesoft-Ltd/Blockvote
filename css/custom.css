@@ -1,0 +1,13 @@
+button.disabled {
+    background-color: #f55656;
+    cursor: not-allowed;
+}
+button.disabled:hover {
+    background-color: #f55656;
+    cursor: not-allowed;
+}
+
+
+.help-block.with-errors {
+    color: black;
+}

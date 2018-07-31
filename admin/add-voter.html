@@ -1,0 +1,83 @@
+      <div id="content">
+        <div class="page-head">
+          <h2 class="page-head-title">Add New Participant</h2>
+          <nav aria-label="breadcrumb" role="navigation">
+            <ol class="breadcrumb page-head-nav">
+              <li class="breadcrumb-item"><a href="#dashboard">Home</a></li>
+              <li class="breadcrumb-item"><a href="#polls">Polls</a></li>
+              <li class="breadcrumb-item active">New Participant</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="main-content container-fluid">
+          <div class="row">
+            <div id="feedback" class="col-md-12"></div>
+            <div class="col-md-12">
+              <div class="card card-border-color card-border-color-primary">
+                <div class="card-header card-header-divider">Registration<span class="card-subtitle">Register a new participant</span></div>
+                <div class="card-body">
+                  <form id="addVoter-form">
+                    <div class="form-group row">
+                      <label for="firstname" class="col-12 col-sm-3 col-form-label text-sm-right">First name</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input id="firstname" pattern="^[_A-z]{1,}$" type="text" class="form-control" required>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="secondname" class="col-12 col-sm-3 col-form-label text-sm-right">Second name</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input id="secondname" pattern="^[_A-z]{1,}$" type="text" class="form-control" required>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="surname" class="col-12 col-sm-3 col-form-label text-sm-right">Surname</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input id="surname" pattern="^[_A-z]{1,}$" type="text" class="form-control" required>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="id" class="col-12 col-sm-3 col-form-label text-sm-right">ID. Number</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input id="id" pattern="^[0-9]{1,}$" type="text" placeholder="" class="form-control" required>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="phone" class="col-12 col-sm-3 col-form-label text-sm-right">Phone</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input id="phone" pattern="^[0-9]{1,}$" type="text" placeholder="" class="form-control" required>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="email" class="col-12 col-sm-3 col-form-label text-sm-right">Email</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input id="email" type="email" placeholder="" class="form-control" required>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="address" class="col-12 col-sm-3 col-form-label text-sm-right">Ether Address</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input id="address" pattern="(0x)[A-z0-9]{40}" data-error="This Ethereum address is invalid." type="text" placeholder="" class="form-control" required>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                    <div class="form-group row pt-3">
+                      <div class="col-sm-12">
+                        <p class="text-right">
+                          <button type="submit" class="btn btn-space btn-primary">Submit</button>
+                          <button type="reset" class="btn btn-space btn-secondary">Clear</button>
+                        </p>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
