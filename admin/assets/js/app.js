@@ -254,7 +254,7 @@ var App = (function(my) {
         };
 
         var displayAddVoterContent = function() {
-          var form = $('#addVoter-form');
+          var form = $('#addVoterForm');
           form.validator();
 
           form.on('submit',function(e){
@@ -280,42 +280,113 @@ var App = (function(my) {
 
           });          
         };
+        
+        var displayAddCandidateContent = function() {
+            var form = $('#addCandidateForm');
+            form.validator();
+            $('#candidatePosition').on('change',function(){
+              if($(this).val() == 'new') location.hash = '#add-position';
+            });
+            var electionAddress = getUrlParameter('election');
+            if(!electionAddress){
+                form.find("input, select").prop("disabled", true);
+                $('#feedback').html('<div class="alert alert-danger alert-dismissible" role="alert"><button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button><div class="icon"><span class="mdi mdi-close-circle-o"></span></div><div class="message"><strong>Oops!</strong> No election has been specified. </div></div>');
+            }
+            else{
+                    $(form).on('submit', function(e){
+                        e.preventDefault();
+                      var position = $('#candidatePosition').val();
+                      var candidate = $('#candidateAddress').val();
+                        
+                      electionContractInstance.addCandidate(position, candidate, (err, result) => {
+                          processTransaction(result);
+                          console.log(err, result);
+                      });                        
+                    });
+                    for(var i = 0; i <= 999; i++){
+                        var electionContractInstance = web3.eth.contract(electionContractABI).at(electionAddress);
+                        electionContractInstance.position(i, (err, result) => {
+                            console.log('Position'+result);
+                            if(!result) return false;
+                            $('#candidatePosition option:first').after('<option value="'+result+'">'+result+'</option>');
+                        });                       
+                    }              
+            }
+            
+        };
+        
+        var displayAddPositionContent = function() {
+            var form = $('#addPositionForm');
+            form.validator();
+            var electionAddress = getUrlParameter('election');
+            if(!electionAddress){
+                form.find("input").prop("disabled", true);
+                $('#feedback').html('<div class="alert alert-danger alert-dismissible" role="alert"><button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button><div class="icon"><span class="mdi mdi-close-circle-o"></span></div><div class="message"><strong>Oops!</strong> No election has been specified. </div></div>');
+            }
+            else{
+                    $(form).on('submit', function(e){
+                      e.preventDefault();
+                      var title = $('#positionTitle').val();
+                        
+                    var electionContractInstance = web3.eth.contract(electionContractABI).at(electionAddress);
+                      electionContractInstance.addPosition(title, (err, result) => {
+                          processTransaction(result);
+                          console.log(err, result);
+                      });                        
+                    });              
+            }
+            
+        };
 
         var displayElectionsContent = function() {
           (function getElections() {
-
+            // fetch election count
             contractInstance.total_elections((err, numElections) => {
               if(numElections < 1){
                 $('.table-container').html('<div class="alert alert-info alert-icon alert-icon-border alert-dismissible" role="alert"><div class="icon"><span class="mdi mdi-info-outline"></span></div><div class="message"><button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button><strong>Info!</strong> There is nothing to show here.</div></div>');
               }
               else{
-                var table = $('<table id="electionsTable" class="table table-striped table-hover"><thead><tr><th style="width:40%;">Title</th><th style="width:20%;">Active</th><th style="width:20%;">Start Time</th><th style="width:20%;"></th></tr></thead><tbody></tbody></table>');
+                var table = $('<table id="electionsTable" class="table table-striped table-hover"><thead><tr><th style="width:30%;">Title</th><th style="width:15%;">Candidates/Choices</th><th style="width:15%;">Positions/Questions</th><th style="width:15%;">Active</th><th style="width:10%;"></th></tr></thead><tbody></tbody></table>');
+                  
                 for(var i = 0; i < numElections; i++){
-                  contractInstance.elections_held(i,(err, result) => {
-                    var row = $('<tr></tr>');
-                    const contractAddress = result;
-                    const contractInstance = web3.eth.contract(contractABI).at(contractAddress);
+                    // fetch address
+                    contractInstance.elections_held(i,(err, electionAddress) => {
+                        var row = $('<tr></tr>');
+                        var electionContractInstance = web3.eth.contract(electionContractABI).at(electionAddress);
 
-                    contractInstance.election_details((err, result) => {
-                      var rowData = $('<td></td>').text(result);
-                      row.prepend(rowData);
-                      contractInstance.ongoing((err, result) => {
-                        var rowData = $('<td></td>').text(result);
-                        row.append(rowData);
-                        contractInstance.start_time((err, result) => {
-                          var rowData = $('<td></td>').text(result);
-                          row.append(rowData); 
-                          var rowData = $('<td class="text-left"></td>').html('<div class="btn-group btn-hspace"><button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle">Actions <span class="icon-dropdown mdi mdi-chevron-down"></span></button><div role="menu" class="dropdown-menu"><a href="candidates.html" class="dropdown-item">Add Candidates</a><a href="positions.html" class="dropdown-item">Manage Positions</a><!--<a href="#" class="dropdown-item">Deactivate</a><div class="dropdown-divider"></div><a href="#" class="dropdown-item">Delete</a>--></div></div>');
-                          rowData.bind('click',function(){
-                            localStorage.setItem("election", contractAddress);
-                          });
-                          row.append(rowData);
+                        // fetch title
+                        electionContractInstance.election_details((err, result) => {
+                            var rowData = $('<td></td>').text(result);
+                            row.append(rowData);        
+
+                            // fetch candidates
+                            electionContractInstance.total_candi(0,(err, result) => {
+                                var rowData = $('<td></td>').text(result);
+                                row.append(rowData);
+
+                                // fetch positions
+                                electionContractInstance.registered_categories((err, categories) => {
+                                    var rowData = $('<td></td>').text(categories);
+                                    row.append(rowData);
+
+                                    // fetch election status
+                                    electionContractInstance.ongoing((err, result) => {
+                                        var rowData = $('<td></td>').text(result);
+                                        row.append(rowData);
+
+                                        var rowData = $('<td class="text-left"></td>').html('<div class="btn-group btn-hspace"><button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle">Actions <span class="icon-dropdown mdi mdi-chevron-down"></span></button><div role="menu" class="dropdown-menu"><a href="?election='+electionAddress+'#add-candidate" class="dropdown-item">Add Candidates</a><a href="?election='+electionAddress+'#add-position" class="dropdown-item">Manage Positions</a><!--<a href="#" class="dropdown-item">Deactivate</a><div class="dropdown-divider"></div><a href="#" class="dropdown-item">Delete</a>--></div></div>');
+                                        rowData.bind('click',function(){
+                                        localStorage.setItem("election", contractAddress);
+                                        });
+                                        row.append(rowData);             
+                                    });
+                                }); 
+                            });
                         });
-                      });
-                    });
-                    table.append(row);
-                  });
+                        table.append(row);
+                    });  
                 }
+                  
                 $('.table-container').append(table);
               }
             });
@@ -378,9 +449,8 @@ var App = (function(my) {
         var displayAddElectionContent = function() {
             // Initialize the form wizard plugin
             Theme.wizard();
-            var form = $('form');
-            form.validator();
-            form.on('submit',function(e){
+            $('#addElectionForm, #addPositionForm, #addCandidateForm').validator();
+            $('form').on('submit',function(e){
               e.preventDefault();
               var action = $(this).attr('data-attr-action');
               switch (action) {
@@ -389,14 +459,16 @@ var App = (function(my) {
 
                   contractInstance.add_Election(desc, (err, result) => {
                     var callback = {
+                      'init' : function(){
+                        var nxtBtns = $('.wizard-next, .btn-next');
+                        nxtBtns.prop('disabled', false);
+                        /*nxtBtns.bind('click', function(){
+                          nxtBtns.prop('disabled', true);
+                        });*/
+                      },
                       'getAddress' : function(tx){
                         console.log('get contract address finished!!!:'+tx.contractAddress);
                         $('#electionAddress').val(tx.contractAddress);
-                        var nxtBtns = $('.wizard-next, .btn-next');
-                        nxtBtns.prop('disabled', false);
-                        nxtBtns.bind('click', function(){
-                          nxtBtns.prop('disabled', true);
-                        });
                       }
                     }
                     processTransaction(result, callback);
@@ -409,20 +481,16 @@ var App = (function(my) {
                   var electionContractAddress = $('#electionAddress').val();
 
                   var addPositionToList = function (title){
-                    $('#postionList ol').prepend('<li>'+title+'</li>');
+                    $('#positionList ol').prepend('<li>'+title+'</li>');
+                    $('#candidatePosition').append('<option value="'+title+'">'+title+'</option>');
                   };
 
                   if(electionContractAddress){
                     var electionContractInstance = web3.eth.contract(electionContractABI).at(electionContractAddress);
                     electionContractInstance.addPosition(position, (err, result) => {
                       var callback = function(){
-                        $('#postionList .alert').hide();
+                        $('#positionList .alert').hide();
                         addPositionToList(position);
-                        var nxtBtns = $('.wizard-next, .btn-next');
-                        nxtBtns.prop('disabled', false);
-                        nxtBtns.bind('click', function(){
-                          nxtBtns.prop('disabled', true);
-                        });
                       }
                       processTransaction(result, callback);
                       console.log(err, result);
@@ -434,33 +502,35 @@ var App = (function(my) {
                   break;
                 case "addCandidate":
                   var electionContractAddress = $('#electionAddress').val();
-                  var position = $('#candidateName').val();
-                  var candidate = $('#candidatePosition').val();
-
-                  var addPositionToList = function (title){
-                    $('#candidateList ol').prepend('<li>'+title+'</li>');
-                  };
-
-                  var addCandidateToList = function (name, position){
-                    $('#candidateList tbody').prepend('<tr><td>'+name+'</td><td>'+position+'</td></tr>');
-                  };
-
                   if(electionContractAddress){
-                    var electionContractInstance = web3.eth.contract(electionContractABI).at(electionContractAddress);
-                    electionContractInstance.addCandidate(position, candidate, (err, result) => {
-                      var callback = function(){
-                        $('#candidateList .alert').hide();
-                        $('#candidateList table').show();
-                        addCandidateToList(candidate, position);
-                        var nxtBtns = $('.wizard-next, .btn-next');
-                        nxtBtns.prop('disabled', false);
-                        nxtBtns.bind('click', function(){
-                          nxtBtns.prop('disabled', true);
+                      var position = $('#candidatePosition').val();
+                      var candidate = $('#candidateAddress').val();
+
+                      var addPositionToList = function (title){
+                        $('#candidateList ol').prepend('<li>'+title+'</li>');
+                      };
+
+                      var addCandidateToList = function (name, position){
+                        $('#candidateList tbody').prepend('<tr><td>'+name+'</td><td>'+position+'</td></tr>');
+                      };
+
+                      if(electionContractAddress){
+                        var electionContractInstance = web3.eth.contract(electionContractABI).at(electionContractAddress);
+                        electionContractInstance.addCandidate(position, candidate, (err, result) => {
+                          var callback = function(){
+                            $('#candidateList .alert').hide();
+                            $('#candidateList table').show();
+                            addCandidateToList(candidate, position);
+                            var nxtBtns = $('.wizard-next, .btn-next');
+                            nxtBtns.prop('disabled', false);
+                          }
+                          processTransaction(result, callback);
+                          console.log(err, result);
                         });
                       }
-                      processTransaction(result, callback);
-                      console.log(err, result);
-                    });
+                   }
+                  else{
+                    $('#feedback').html('<div class="alert alert-danger alert-icon alert-icon-border alert-dismissible" role="alert"><div class="icon"><span class="mdi mdi-close-circle-o"></span></div><div class="message"><button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button><strong>Oops!</strong> Election contract Address could not be established. Please try again.</div></div>');
                   }
                   break;
                 default:
@@ -515,6 +585,12 @@ var App = (function(my) {
             case "#add-election":
                 loadPageContent('add-election.html', displayAddElectionContent);
                 break;
+            case "#add-candidate":
+                loadPageContent('add-candidate.html', displayAddCandidateContent);
+                break;
+            case "#add-position":
+                loadPageContent('add-position.html', displayAddPositionContent);
+                break;
             case "":
             case "#dashboard":
                 loadPageContent('main.html', displayDashboardContent);
@@ -525,7 +601,7 @@ var App = (function(my) {
         window.onhashchange = loadPage;
     }
 
-    var txStatus = function (txHash, callback) {
+    var txStatus = function (txHash, callback='') {
       web3.eth.getTransactionReceipt(txHash, (err, result) => {
         if(result && result.status == '0x1'){
           $.gritter.add({
@@ -534,7 +610,12 @@ var App = (function(my) {
               class_name: "color success"
           });
           if(callback.getAddress) getContractAddress(txHash, contractAddress, callback.getAddress);
-          else if(callback) callback();
+          if(callback.init){
+              callback.init();    
+          }
+          else{
+              callback();            
+          }
         }
         else if(result && result.status == '0x0'){
           $.gritter.add({

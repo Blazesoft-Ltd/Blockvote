@@ -17,9 +17,9 @@
                 <div id="wizard1" class="wizard wizard-ux">
                   <div class="steps-container">
                     <ul class="steps">
-                      <li data-step="1" class="active">Step 1<span class="chevron"></span></li>
-                      <li data-step="2">Step 2<span class="chevron"></span></li>
-                      <li data-step="3">Step 3<span class="chevron"></span></li>
+                      <li data-step="1" class="active">Create Poll<span class="chevron"></span></li>
+                      <li data-step="2">Add Positions<span class="chevron"></span></li>
+                      <li data-step="3">Add Candidates<span class="chevron"></span></li>
                       <li data-step="4">Finish<span class="chevron"></span></li>
                     </ul>
                   </div>
@@ -30,7 +30,7 @@
                   <div class="step-content">
                     <div data-step="1" class="step-pane active">
                       <div class="container p-0">
-                        <form action="javascript:" data-parsley-namespace="data-parsley-" data-parsley-validate="" novalidate="" data-attr-action="addElection" class="form-horizontal group-border-dashed">
+                        <form id="addElectionForm" action="javascript:" data-parsley-namespace="data-parsley-" data-parsley-validate="" novalidate="" data-attr-action="addElection" class="form-horizontal group-border-dashed">
                           <div class="form-group row">
                             <div class="col-sm-7">
                               <h3 class="wizard-title">Create a New Poll</h3>
@@ -67,7 +67,7 @@
                     </div>
                     <div data-step="2" class="step-pane">
                       <div class="container p-0">
-                        <form id="" action="javascript:" data-parsley-namespace="data-parsley-" data-parsley-validate="" novalidate="" data-attr-action="addPosition" class="form-horizontal group-border-dashed">
+                        <form id="addPositionForm" action="javascript:" data-parsley-namespace="data-parsley-" data-parsley-validate="" novalidate="" data-attr-action="addPosition" class="form-horizontal group-border-dashed">
                           <div class="form-group row">
                             <div class="col-sm-7">
                               <h3 class="wizard-title">Add Positions</h3>
@@ -89,7 +89,7 @@
                             </div>
                           </div>
                           <div class="form-group row align-items-center">
-                            <div id="postionList" class="col-sm-6">
+                            <div id="positionList" class="col-sm-6">
                               <div class="alert alert-warning alert-icon alert-icon-colored alert-dismissible" role="alert"><div class="icon"><span class="mdi mdi-alert-triangle"></span></div><div class="message"><button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button><strong>Sorrry!</strong> There is nothing to show here.</div></div>
                               <ol></ol>
                             </div>
@@ -97,7 +97,7 @@
                           <div class="form-group row">
                             <div class=" col-sm-12">
                               <button data-wizard="#wizard1" class="btn btn-secondary btn-space wizard-previous">Previous</button>
-                              <button data-wizard="#wizard1" class="btn btn-primary btn-space wizard-next" disabled>Next Step</button>
+                              <button data-wizard="#wizard1" class="btn btn-primary btn-space wizard-next">Next Step</button>
                             </div>
                           </div>
                         </form>
@@ -111,17 +111,20 @@
                         </div>
                         <div class="form-group row align-items-center">
                           <div class="col-sm-10">
-                            <form action="javascript:" data-parsley-namespace="data-parsley-" data-parsley-validate="" novalidate="" data-attr-action="addCandidate" class="form-horizontal group-border-dashed">
+                            <form id="addCandidateForm" action="javascript:" data-parsley-namespace="data-parsley-" data-parsley-validate="" novalidate="" data-attr-action="addCandidate" class="form-horizontal group-border-dashed">
                               <div class="form-group row">
-                                <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">Name</label>
+                                <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">Address</label>
                                 <div class="col-12 col-sm-8 col-lg-6">
-                                  <input id="candidateName" type="text" placeholder="Type name of candidate" class="form-control" required>
+                                  <input id="candidateAddress" type="text" pattern="(0x)[A-z0-9]{40}" placeholder="Type address of candidate" class="form-control" data-error="This Ethereum address is invalid." required>
+                                    <div class="help-block with-errors"></div>
                                 </div>
                               </div>
                               <div class="form-group row">
                                 <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">Position</label>
                                 <div class="col-12 col-sm-8 col-lg-6">
-                                  <input id="candidatePosition" type="text" placeholder="Type position" class="form-control" required>
+                                  <select id="candidatePosition" class="form-control" required>
+                                      <option value="" selected="">Select position</option>
+                                  </select>
                                 </div>
                               </div>
                               <div class="form-group row">
@@ -141,7 +144,7 @@
                                 <table class="table table-sm table-striped" style="display: none;">
                                   <thead>
                                     <tr>
-                                      <th>Name</th>
+                                      <th>Candidate Address</th>
                                       <th>Position</th>
                                     </tr>
                                   </thead>
@@ -155,7 +158,7 @@
                         <div class="form-group row">
                           <div class="col-sm-12">
                             <button data-wizard="#wizard1" class="btn btn-secondary btn-space wizard-previous">Previous</button>
-                            <button data-wizard="#wizard1" class="btn btn-primary btn-space wizard-next" disabled>Next Step</button>
+                            <button data-wizard="#wizard1" class="btn btn-primary btn-space wizard-next">Next Step</button>
                           </div>
                         </div>
                     </div>
@@ -190,7 +193,7 @@
                         </div>-->
                         <div class="form-group row">
                           <div class="offset-sm-3 col-sm-9">
-                            <button class="btn btn-success btn-xl">Finish</button>
+                            <a href="#polls" class="btn btn-success btn-xl">Finish</a>
                           </div>
                         </div>
                         <div class="form-group row">
