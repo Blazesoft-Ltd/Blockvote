@@ -13,47 +13,50 @@
   web3.setProvider(new web3.providers.HttpProvider('https://ropsten.infura.io/nW417vI9QlPuilsrRD2B'));
 }*/
 
-$.fn.txStatus = function (txHash) {
-
-    var web3 = new Web3();
-    web3.setProvider(new web3.providers.HttpProvider('https://ropsten.infura.io/nW417vI9QlPuilsrRD2B'));
-    var result = web3.eth.getTransactionReceipt(txHash);
-    if(result && result.status == '0x1'){
-      return true;           
-    }
-    else if(result && result.status == '0x0'){
-      return false;
-    }
-    else{
-      return $.fn.txStatus(txHash);
-    }
+$.fn.txStatus = function (txHash, callback = '') {
+    //var web3 = new Web3();
+    //web3.setProvider(new web3.providers.HttpProvider('https://ropsten.infura.io/nW417vI9QlPuilsrRD2B'));
+    var result = web3.eth.getTransactionReceipt(txHash, (err, result) => {
+        if(result && result.status == '0x1'){
+          callback(true);           
+        }
+        else if(result && result.status == '0x0'){
+          callback(false);
+        }
+        else{
+          $.fn.txStatus(txHash, callback);
+        }      
+    });
 }
-
-$.fn.internalTransactionAddress = function (contractAddress,txHash,startBlock=0,endBlock=9999999){
-  var data = $.ajax({
-      url: "http://api-ropsten.etherscan.io/api?module=account&action=txlistinternal&address="+contractAddress+"&startblock="+startBlock+"&endblock="+endBlock+"&sort=asc&apikey=YourApiKeyToken",
-      async: false,
-      data: 'json'
-  });
-
-  var dataJson = data.responseJSON;
-  //console.log(dataJson);
-
-  if(dataJson.status == '1'){
-    var tx = dataJson.result.find(result => result.hash === txHash);
-    if(tx && tx.contractAddress){
-      return tx.contractAddress;
-    }
-    else{
-      console.log('iterate');
-      return $.fn.internalTransactionAddress(txHash);
-    }
-  }
-}
+    
+ $.fn.getContractAddress = function(txHash, address, callback, block = {start: 0, end: 9999999}) {
+    console.log('getContractAddress:' + address);
+    var api = "http://api-ropsten.etherscan.io/api?module=account&action=txlistinternal&address=" + address + "&startblock=" + block.start + "&endblock=" + block.end + "&sort=asc&apikey=YourApiKeyToken";
+    $.ajax({
+        url: api,
+        async: true,
+        data: 'json',
+        success: function(dataJson) {
+            if (dataJson.status == '1') {
+                var tx = dataJson.result.find(result => result.hash === txHash);
+                if (tx && tx.contractAddress) {
+                    if (callback) callback(tx);
+                    return true;
+                } else {
+                    setTimeout(function() {
+                        $.fn.getContractAddress(txHash, address, callback, block);
+                        console.log('no contract address');
+                        console.log(txHash);
+                    }, 2000);
+                }
+            }
+        }
+    });
+};
 
 $.fn.isLoggedIn = function (){
   if(web3.currentProvider.isMetaMask && !web3.isAddress(web3.eth.accounts[0])){
-    $('body').html('<h1>Address not detected!</h1><h2>Kindly login into your MetaMask. Then refresh the page</h2>');
+    $('#feedback').html('<h1>Address not detected!</h1><h2>Kindly login into your MetaMask. Then refresh the page</h2>');
     return false;
   }
   else{
@@ -62,13 +65,13 @@ $.fn.isLoggedIn = function (){
       return true;
     }
     else{
-      $('body').html('<h1>Wrong network!</h1><h2>Kindly switch to the '+defaultNetwork+' network in your MetaMask. Then refresh the page</h2>');
+      $('#feedback').html('<h1>Wrong network!</h1><h2>Kindly switch to the '+defaultNetwork+' network in your MetaMask. Then refresh the page</h2>');
     }
     return false;
   } 
 }
 
-$.fn.getNetworkName = function (web3){
+$.fn.getNetworkName = function (){
   var networkId = web3.version.network;
   switch (networkId) {
     case "1":

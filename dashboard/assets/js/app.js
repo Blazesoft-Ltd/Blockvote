@@ -26,11 +26,16 @@ var App = (function(my) {
 
     var init = function() {
         console.log('Dashboard inititalized!');
-        localStorage.setItem('account',contractAddress);
-        authenticate(loadContent);
 
-        console.log('>>>'+contractAddress);
-
+        if(web3.isAddress(contractAddress)){
+            localStorage.setItem('account',contractAddress);
+            authenticate(loadContent);
+        }
+        else{
+            listAccountByAddress(getAddress());
+        }
+        // initial page switcher
+        window.onhashchange = loadPage;
     };
 
     var authenticate = function(callback){
@@ -42,7 +47,7 @@ var App = (function(my) {
                     callback();
                 };
                 var reject = function(){
-                    $('body').html('<div class="modal fade show" id="mod-danger" tabindex="-1" role="dialog" style="padding-right: 15px;display: block;background-color: #ea4335;"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"></div><div class="modal-body"><div class="text-center"><div class="text-danger"><span class="modal-main-icon mdi mdi-alert-circle-o"></span></div><h3>Access Denied!</h3><h4>You do not have permission to access this account.</h4><p>Kindly switch your metamask account then reload this page.</p><div class="mt-8"><a href=""><button class="btn btn-space btn-danger" type="button">Reload</button></a></div></div></div><div class="modal-footer"></div></div></div></div>');
+                    $('body').html('<div class="modal fade show" id="mod-danger" tabindex="-1" role="dialog" style="padding-right: 15px;display: block;background-color: #ea4335;"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"></div><div class="modal-body"><div class="text-center"><div class="text-danger"><span class="modal-main-icon mdi mdi-alert-circle-o"></span></div><h3>Access Denied!</h3><h4>You do not have permission to access this account.</h4><p>Kindly switch your metamask account then reload this page.</p><div class="mt-8"><a href=""><button class="btn btn-space btn-success" type="button">Reload</button></a><div class="card-title">OR</div><a href="?account=change"><button class="btn btn-space btn-primary" type="button">Change Address</button></a></div></div></div><div class="modal-footer"></div></div></div></div>');
                 };
                 isAdmin(resolve,reject);
             }
@@ -100,13 +105,13 @@ var App = (function(my) {
             .attr('href','https://ropsten.etherscan.io/address/'+address);
         }());
 
-      (function getElection() {
+      /*(function getElection() {
         contractInstance.total_elections((err, result) => {
           var numElections = result;
           console.log(err,'num Elections:'+numElections);
           $('#electionCount').html(parseInt(numElections));
         });
-      }());
+      }());*/
 
       (function accountBalance(){
         web3.eth.getBalance(web3.eth.accounts[0], function(err, result){
@@ -145,13 +150,15 @@ var App = (function(my) {
       }());
 
       (function accountName() {
-        contractInstance.institutioName((err, result) => {
-          var accountName = result;
-          $('title').prepend(accountName+' | ');
-          $('.page-title').append(': '+accountName);
-          $('.user-name.account').text(accountName);
-          console.log('name:'+accountName);
-        });
+          if(web3.isAddress(contractInstance.address)){
+            contractInstance.institutioName((err, result) => {
+              var accountName = result;
+              $('title').prepend(accountName+' | ');
+              $('.page-title').append(': '+accountName);
+              $('.user-name.account').text(accountName);
+              console.log('name:'+accountName);
+            });
+          }
       }());
 
     };
@@ -218,7 +225,8 @@ var App = (function(my) {
 
 
     var loadPage = function () {
-        var loadPageContent = function(file,callback) {
+        var loadPageContent = function(file, callback) {
+            console.log(file);
             $.ajax({
                 url: file,
                 type: "get",
@@ -313,6 +321,15 @@ var App = (function(my) {
                     }              
             }
             
+        };
+        var displaySelectAccountContent = function() {
+            var form = $('#accountForm');
+            form.validator();
+            $(form).on('submit', function(e){
+                e.preventDefault();
+                var address = $('#accountAddress').val();
+                window.location = '?account='+address;
+            });
         };
         
         var displayAddPositionContent = function() {
@@ -591,6 +608,9 @@ var App = (function(my) {
             case "#add-position":
                 loadPageContent('add-position.html', displayAddPositionContent);
                 break;
+            case "#no-account":
+                loadPageContent('accounts.html', displaySelectAccountContent);
+                break;
             case "":
             case "#dashboard":
                 loadPageContent('main.html', displayDashboardContent);
@@ -598,7 +618,7 @@ var App = (function(my) {
             default:
                 window.location = '404.html';
         }
-        window.onhashchange = loadPage;
+                
     }
 
     var txStatus = function (txHash, callback='') {
@@ -666,6 +686,14 @@ var App = (function(my) {
           }
         }
       });
+    };
+    
+    function listAccountByAddress(address) {
+        console.log('list by address');
+        loadSnippets();
+        window.location.hash = "#no-account";
+        //$(window).trigger('hashchange');
+        $('.be-left-sidebar').hide();
     };
 
     function getUrlParameter (sParam){

@@ -20,10 +20,7 @@
     <!-- Animate CSS -->
     <link href="css/animate.css" rel="stylesheet" >
     
-    <!-- Owl-Carousel -->
-    <link rel="stylesheet" href="css/owl.carousel.css" >
-    <link rel="stylesheet" href="css/owl.theme.css" >
-    <link rel="stylesheet" href="css/owl.transitions.css" >
+ 
 
     <!-- Custom CSS -->
     <link href="css/style.css" rel="stylesheet">
@@ -60,7 +57,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll" href="#page-top">BlockVote</a>
+                <a class="navbar-brand page-scroll" href="index.html">BlockVote</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -73,10 +70,13 @@
                         <a class="page-scroll" href="index.html">Home</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="index.html#partners">Sign in</a>
+                        <a class="page-scroll" href="register.html">Sign Up</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="index.html#contact">Vote</a>
+                        <a class="page-scroll" href="dashboard/">Sign in</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#">Vote</a>
                     </li>
                 </ul>
             </div>
@@ -142,8 +142,9 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12">
                     <div class="section-title text-center">
-                            <p>Fill in the details below.</p>
-                        </div>
+                            <p>PLease fill out the form below.</p>
+                    </div>
+                    <div id="feedback"></div>
                 </div>
             </div>
              <div class="row">
@@ -153,17 +154,17 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Account Name*</label>
-                                    <input type="text" id="name" class="form-control" pattern="^[_A-z0-9 ]{1,}$" class="field" placeholder="Account Name" required>
+                                    <input type="text" id="name" class="form-control" pattern="^[_A-z0-9 ]{1,}$" class="field" placeholder=" Name of account" required>
                                     <p class="help-block text-danger"></p>
                                 </div>
                                 <div class="form-group">
                                     <label>Minium Quorum*</label>
-                                    <input type="text" id="quorum" class="form-control" pattern="^[0-9]{1,}$" class="field" placeholder="Minimum Quorum" required>
+                                    <input type="text" id="quorum" class="form-control" pattern="^[0-9]{1,}$" class="field" placeholder="Minimum number of participants required" required>
                                     <p class="help-block text-danger"></p>
                                 </div>
                                 <div class="form-group">
-                                    <label>Election Period*</label>
-                                    <input type="text" id="period" class="form-control" pattern="^[0-9]{1,}$" class="field" placeholder="Election Period" required>
+                                    <label>Poll Period*</label>
+                                    <input type="text" id="period" class="form-control" pattern="^[0-9]{1,}$" class="field" placeholder="Duration the poll will run" required>
                                     <p class="help-block text-danger"></p>
                                 </div>
                             </div>
@@ -182,7 +183,7 @@
 
 
     <!-- Start Team Member Section -->
-    <section id="team" class="team-member-section" style="height: 500px;">
+    <section id="team" class="team-member-section" style="height: 550px;">
 
     </section>
     <!-- End Team Member Section -->
@@ -310,34 +311,55 @@
     <script src="js/count-to.js"></script>
     <script src="js/jquery.appear.js"></script>
     <script src="js/cbpAnimatedHeader.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
 	<script src="js/jquery.fitvids.js"></script>
 
     <!-- Contact Form JavaScript -->
     <script src="js/jqBootstrapValidation.js"></script>
-    <script src="js/contact_me.js"></script>
 
     <!-- Custom Theme JavaScript -->
     <script src="js/script.js"></script>
     
     <script src="https://m.blazebay.com/assets/js/validator.js"></script>
+    <!--<script src="js/web3.min.js"></script>
+    <script src="js/web3.init.js"></script>-->
     <script src="js/common.js"></script>
-    <script src="js/web3.min.js"></script>
     
 	<script type="text/javascript">
-		// Checking if Web3 has been injected by the browser (Mist/MetaMask)
-		if (typeof web3 !== 'undefined') {
-			// Use the browser's ethereum provider
-			var web3 = new Web3(web3.currentProvider);
-			// MetaMask is installed but not logged in
-		}
-		else {
-		  	console.log('Kindly install MetaMask!');
-		}
-
-		var contractABI = [{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"minimum_quorum","type":"uint256"},{"name":"election_period","type":"uint256"}],"name":"add_Institution","outputs":[],"payable":false,"type":"function","stateMutability":"nonpayable"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"institute","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function","stateMutability":"view"},{"constant":true,"inputs":[],"name":"registered_institutions","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function","stateMutability":"view"}]
-		var contractAddress = '0x8a13b4d8c96c8d6efb07512d9f149733e1971d0f';
-		var contractInstance = web3.eth.contract(contractABI).at(contractAddress)
+window.addEventListener('load', function() {
+    if (typeof web3 !== 'undefined') {
+        console.log('web3 is enabled');
+        if (web3.currentProvider.isMetaMask === true) {
+            console.log('MetaMask is active');
+            if(!web3.eth.accounts[0]){
+                $('#feedback').html('<div class="alert alert-danger" role="alert"><strong>No Address detected!</strong> Kindly unlock your metamask account then <a href="" class="alert-link">refresh</a> this page to proceed.</div>');
+                $('#registration-form input, button').prop('disabled','true');
+                return false;              
+            }
+            
+            if($.fn.getNetworkName() !== 'ropsten'){
+                $('#feedback').html('<div class="alert alert-danger" role="alert"><strong>Wrong detwork detected!</strong> Kindly switch to Ropsten Test Network in your metamask then <a href="" class="alert-link">refresh</a> this page to proceed.</div>');
+                $('#registration-form input, button').prop('disabled','true');
+                return false;               
+            }  
+            
+        } 
+        else {
+        console.log('web3 is not found');
+            $('#feedback').html('<div class="alert alert-danger" role="alert"><strong>Misssig Dependancy!</strong> Kindly install <a href="https://metamask.io/" target="_blank" class="alert-link">MetaMask</a> then <a href="" class="alert-link">refresh</a> this page to proceed.</div>');
+            $('#registration-form input, button').prop('disabled','true');
+            return false;
+        }
+    } 
+    else {
+        console.log('web3 is not found');
+        $('#feedback').html('<div class="alert alert-danger" role="alert"><strong>Misssig Dependancy!</strong> Kindly install <a href="https://metamask.io/" target="_blank" class="alert-link">MetaMask</a> then <a href="" class="alert-link">refresh</a> this page to proceed.</div>');
+        $('#registration-form').html('');
+        return false;
+    }  
+    
+		const contractABI = [{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"minimum_quorum","type":"uint256"},{"name":"election_period","type":"uint256"}],"name":"add_Institution","outputs":[],"payable":false,"type":"function","stateMutability":"nonpayable"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"institute","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function","stateMutability":"view"},{"constant":true,"inputs":[],"name":"registered_institutions","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function","stateMutability":"view"}]
+		const contractAddress = '0x8a13b4d8c96c8d6efb07512d9f149733e1971d0f';
+		const contractInstance = web3.eth.contract(contractABI).at(contractAddress)
 
 		function getInstitution() {
 			var index = 0;
@@ -355,7 +377,8 @@
 		}
 
 		$('#registration-form').on('submit',function(e){
-			e.preventDefault()
+			e.preventDefault();
+            console.log('form submitted!');
 			if(!$.fn.isLoggedIn()){
 				$('#feedback').html('Kindly log into your metamask to make this transaction');
 				return;
@@ -364,31 +387,69 @@
 			var minimum_quorum = $("#quorum").val();
 			var election_period = $("#period").val();
 
-		    contractInstance.add_Institution(name, minimum_quorum, election_period, (err, result) => {
+		    contractInstance.add_Institution(name, minimum_quorum, election_period, (err, txHash) => {
 	            var txHashRegex = /^0x([A-Fa-f0-9]{64})$/;
-	            if(txHashRegex.test(result)){
-	              $('#feedback').html('Transaction is pending...');
-	              var status = $.fn.txStatus(result);
-	              console.log('status:'+status);
-	              if(status){
-	                $('#feedback').html('Transaction was successfully <a target="blank" href="https://ropsten.etherscan.io/tx/'+result+'">'+result.substring(0,10)+'...</a>');
-	                $("#registration-form").trigger('reset');
-	                var contractAddress = $.fn.internalTransactionAddress(result);
-	                if(web3.isAddress(contractAddress)){
-            			$('#feedback').append('<br>Access your new <a href=admin?account='+contractAddress+'>account</a>');
-	                }           
-	              }
-	              else{
-	                $('#feedback').html('Transaction failed <a href="https://ropsten.etherscan.io/tx/'+result+'">'+result+'</a>');
-	              }
+	            if(txHashRegex.test(txHash)){
+                    
+                    $('#feedback').html('<div class="alert alert-success" role="alert"> <strong>Success!</strong> Your request was submitted. Kindly wait while we fetch the response.</div>');
+                    var callback = function(status) {
+                      if(status){
+                                               
+                        $('#feedback').html('<div class="alert alert-success" role="alert"> <strong>Hooray!</strong> The <a target="blank" href="https://ropsten.etherscan.io/tx/'+txHash+'">Transaction</a> was successful. Kindly wait while we generate your account link...</div>');
+                        $("#registration-form").trigger('reset');
+                        
+                        var callback = function(tx) {
+                            if(web3.isAddress(tx.contractAddress)){
+
+                                $('#feedback').prepend('<div class="alert alert-info" role="alert"> Access your new <a href="dashboard?account='+tx.contractAddress+'" class="alert-link">account</a> now!</div>');
+                            }                            
+                        };
+                        $.fn.getContractAddress(txHash, contractAddress, callback);
+                      }
+                      else{
+                        $('#feedback').html('Transaction failed <a href="https://ropsten.etherscan.io/tx/'+result+'">'+result+'</a>');
+                      }                        
+                    };
+                    
+                    $.fn.txStatus(txHash, callback);            
+
 	            }
 	            else{
-	              $('#feedback').html('Sorry the transaction failed <a target="blank" href="https://ropsten.etherscan.io/tx/'+result+'">'+result.substring(0,10)+'....</a>');           
+	              $('#feedback').html('Sorry the transaction failed <a target="blank" href="https://ropsten.etherscan.io/tx/'+result+'">'+result.substring(0,10)+'....</a>'); 
+                    $('#feedback').html('<div class="alert alert-danger" role="alert"> <strong>Oops!</strong> Soory, it looks like the <a target="blank" href="https://ropsten.etherscan.io/tx/'+result+'">transaction</a> failed. Please try again.</div>');
 	            }
-	            console.log(err, result);
+	            console.log(err, txHash);
 		    })
 
-		})
+		});    
+    
+    
+    
+    
+    
+    
+    
+    
+});        
+        
+		// Checking if Web3 has been injected by the browser (Mist/MetaMask)
+		/*if (typeof web3 == 'undefined') {
+            
+			// Use the browser's ethereum provider
+			var web3 = new Web3(web3.currentProvider);
+			// MetaMask is installed but not logged in
+            console.log(web3.currentProvider);
+            if(typeof web3.currentProvider.isMetaMask === 'undefined'){
+                console.log('MetaMask is not installed but not logged in'); 
+                return false;
+            }
+		}
+		else {
+		  	$('#feedback').html('<div class="alert alert-danger" role="alert"><strong>Misssig Dependancy!</strong> Kindly install <a href="https://metamask.io/" target="_blank" class="alert-link">MetaMask</a>.</div>');
+            return false;
+		}*/
+
+
 	</script>
 
 </body>
