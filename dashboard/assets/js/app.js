@@ -19,7 +19,7 @@ var App = (function(my) {
         //libsPath: "lib",
         mainContractAddress: "0x8a13b4d8c96c8d6efb07512d9f149733e1971d0f",
         network: "ropsten",
-        etherscanApi: "http://api-ropsten.etherscan.io/"
+        etherscanApi: "https://api-ropsten.etherscan.io/"
     };
 
     var accountAddress = getAddress();
@@ -69,7 +69,7 @@ var App = (function(my) {
         (function getAccounts (){
 
             $.ajax({
-                url: "http://api-ropsten.etherscan.io/api?module=account&action=txlist&address="+accountAddress+"&startblock=0&endblock=9999999&sort=asc&apikey=YourApiKeyToken",
+                url: "https://api-ropsten.etherscan.io/api?module=account&action=txlist&address="+accountAddress+"&startblock=0&endblock=9999999&sort=asc&apikey=YourApiKeyToken",
                 data: 'json',
                 success: function(dataJson) {
 
@@ -664,7 +664,7 @@ var App = (function(my) {
 
     var getContractAddress = function(txHash, address, callback, block = {start:0,end:9999999}){
       console.log('getContractAddress:'+address);
-      var api = "http://api-ropsten.etherscan.io/api?module=account&action=txlistinternal&address="+address+"&startblock="+block.start+"&endblock="+block.end+"&sort=asc&apikey=YourApiKeyToken";
+      var api = "https://api-ropsten.etherscan.io/api?module=account&action=txlistinternal&address="+address+"&startblock="+block.start+"&endblock="+block.end+"&sort=asc&apikey=YourApiKeyToken";
       $.ajax({
         url: api,
         async: true,

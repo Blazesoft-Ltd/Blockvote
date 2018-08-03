@@ -31,7 +31,7 @@ $.fn.txStatus = function (txHash, callback = '') {
     
  $.fn.getContractAddress = function(txHash, address, callback, block = {start: 0, end: 9999999}) {
     console.log('getContractAddress:' + address);
-    var api = "http://api-ropsten.etherscan.io/api?module=account&action=txlistinternal&address=" + address + "&startblock=" + block.start + "&endblock=" + block.end + "&sort=asc&apikey=YourApiKeyToken";
+    var api = "https://api-ropsten.etherscan.io/api?module=account&action=txlistinternal&address=" + address + "&startblock=" + block.start + "&endblock=" + block.end + "&sort=asc&apikey=YourApiKeyToken";
     $.ajax({
         url: api,
         async: true,

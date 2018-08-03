@@ -142,7 +142,7 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12">
                     <div class="section-title text-center">
-                            <p>PLease fill out the form below.</p>
+                            <p>Please fill out the form below.</p>
                     </div>
                     <div id="feedback"></div>
                 </div>
@@ -337,7 +337,7 @@ window.addEventListener('load', function() {
             }
             
             if($.fn.getNetworkName() !== 'ropsten'){
-                $('#feedback').html('<div class="alert alert-danger" role="alert"><strong>Wrong detwork detected!</strong> Kindly switch to Ropsten Test Network in your metamask then <a href="" class="alert-link">refresh</a> this page to proceed.</div>');
+                $('#feedback').html('<div class="alert alert-danger" role="alert"><strong>Wrong network detected!</strong> Kindly switch to Ropsten Test Network in your metamask then <a href="" class="alert-link">refresh</a> this page to proceed.</div>');
                 $('#registration-form input, button').prop('disabled','true');
                 return false;               
             }  
