@@ -391,9 +391,9 @@ var App = (function(my) {
                                         var rowData = $('<td></td>').text(result);
                                         row.append(rowData);
 
-                                        var rowData = $('<td class="text-left"></td>').html('<div class="btn-group btn-hspace"><button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle">Actions <span class="icon-dropdown mdi mdi-chevron-down"></span></button><div role="menu" class="dropdown-menu"><a href="?election='+electionAddress+'#add-candidate" class="dropdown-item">Add Candidates</a><a href="?election='+electionAddress+'#add-position" class="dropdown-item">Manage Positions</a><!--<a href="#" class="dropdown-item">Deactivate</a><div class="dropdown-divider"></div><a href="#" class="dropdown-item">Delete</a>--></div></div>');
+                                        var rowData = $('<td class="text-left"></td>').html('<div class="btn-group btn-hspace"><button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle">Actions <span class="icon-dropdown mdi mdi-chevron-down"></span></button><div role="menu" class="dropdown-menu"><a href="?election='+electionAddress+'#add-candidate" class="dropdown-item">Add Candidates</a><a href="?election='+electionAddress+'#add-position" class="dropdown-item">Add Positions</a><!--<a href="#" class="dropdown-item">Deactivate</a><div class="dropdown-divider"></div><a href="#" class="dropdown-item">Delete</a>--></div></div>');
                                         rowData.bind('click',function(){
-                                        localStorage.setItem("election", contractAddress);
+                                            localStorage.setItem("election", contractAddress);
                                         });
                                         row.append(rowData);             
                                     });
@@ -640,7 +640,7 @@ var App = (function(my) {
         else if(result && result.status == '0x0'){
           $.gritter.add({
               title: "Oops!",
-              text: 'Transaction <a href="https://ropsten.etherscan.io/tx/'+txHash+'" target="_blank">'+txHash.substring(0,5)+'...'+txHash.substring(37,42)+'</a> completed.',
+              text: 'Transaction <a href="https://ropsten.etherscan.io/tx/'+txHash+'" target="_blank">'+txHash.substring(0,5)+'...'+txHash.substring(37,42)+'</a> failed.',
               class_name: "color danger"
           });
         }
@@ -706,7 +706,6 @@ var App = (function(my) {
         {
             return sParameterName[1];
         }
-        return false;
       }
     };
 
