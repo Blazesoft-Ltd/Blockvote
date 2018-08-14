@@ -1,0 +1,51 @@
+      <div id="content">
+        <div class="page-head">
+          <h2 class="page-head-title">New Candidate</h2>
+          <nav aria-label="breadcrumb" role="navigation">
+            <ol class="breadcrumb page-head-nav">
+              <li class="breadcrumb-item"><a href="#dashboard">Home</a></li>
+              <li class="breadcrumb-item"><a href="#polls">Elections</a></li>
+              <!--<li class="breadcrumb-item"><a href="candidates.html">Candidates</a></li>-->
+              <li class="breadcrumb-item active">New Candidate</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="main-content container-fluid">
+          <div class="row">
+            <div id="feedback" class="col-md-12"></div>
+            <div class="col-md-12">
+              <div class="card card-border-color card-border-color-primary">
+                <div class="card-header card-header-divider">Add New Candidate<span class="card-subtitle">Register a new candidate</span></div>
+                <div class="card-body">
+                  <form id="addCandidateForm" data-toggle="validator">
+                    <div class="form-group row">
+                      <label for="address" class="col-12 col-sm-3 col-form-label text-sm-right">Candidate Address</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input id="candidateAddress" pattern="(0x)[A-z0-9]{40}" data-error="This Ethereum address is invalid." type="text" placeholder="Candidate's Ether Address" class="form-control" required>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right">Position</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <select id="candidatePosition" class="form-control" required>
+                            <option value="" selected="">Select position</option>
+                            <option value="new">+ Create New Position</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group row pt-3">
+                      <div class="col-sm-12">
+                        <p class="text-right">
+                            <button type="submit" class="btn btn-space btn-primary">Submit</button>
+                            <a href="#polls" class="btn btn-space btn-secondary">Cancel</a>
+                        </p>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>

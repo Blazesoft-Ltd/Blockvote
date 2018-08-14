@@ -1,0 +1,72 @@
+        <div id="content">
+            
+            <div class="main-content container-fluid">
+                
+                <div class="row">
+                    <div class="col-lg-9">
+                        
+                        
+
+                        
+                        
+                      <div class="card card-contrast text-center">
+                        <div class="card-body">
+
+                            <!--<div class="alert alert-contrast alert-info alert-dismissible" role="alert">
+                                <div class="icon"><span class="mdi mdi-info-outline"></span></div>
+                                <div class="message">
+                                  <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button> Kindly hold on while we genrate a list of accounts linked to this address.
+                                </div>
+                              </div>-->                    
+                            
+                            <!--<div class="alert alert-contrast alert-danger alert-dismissible" role="alert">
+                                <div class="icon"><span class="mdi mdi-close-circle-o"></span></div>
+                                <div class="message">
+                                  <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button><strong>Sorry!</strong> Your address is not linked to any account. Kindly <a href="../register.html" class="alert-link">create a new account</a>.
+                                </div>
+                              </div>-->                           
+                            
+                            <div class="card-title">Enter your account address below to and press 'Go!' to proceed</div>
+                            <!--<div class="card-title">Select Account</div>-->
+                            <form id="accountForm" lpformnum="6" _lpchecked="1">
+                                <div class="form-group row">
+                                    <div class="col-12 offset-md-2 col-sm-8">
+                                        
+                                        <!--<div class="input-group mb-3">
+                                            <span class="input-group-prepend"><span class="input-group-text">Accounts: </span></span>
+                                            <select class="form-control">
+                                              <option value="" selected="">Select Account</option>
+                                              <option value="2">ergerge - 0x81b7e08f65bdf56...</option>
+                                              <option value="3">wfwef - 0x024989b42674a71...</option>
+                                              <option value="4">sferger - 0x3887c7585ef1763...</option>
+                                            </select>
+                                        </div> -->
+                                        
+                                        <div class="input-group mb-3">
+                                          <input id="accountAddress" class="form-control" type="text" pattern="(0x)[A-z0-9]{40}" placeholder="Enter your account Address" data-error="This Ethereum address is invalid." required>
+                                          <div class="input-group-append">
+                                            <button class="btn btn-primary" type="submit">  Go!  </button>
+                                          </div>
+                                        </div>  
+                                        <div class="help-block with-errors text-danger"></div>
+                                        
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="card-title">Dont have an account?</div>
+                
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                  <a href="../index.html" class="btn btn-secondary btn-space"><i class="icon icon-left mdi mdi-arrow-left"></i> Go Back</a>
+                                  <a href="../register.html" class="btn btn-success btn-space wizard-next" data-wizard="#wizard1"><i class="icon icon-left mdi mdi-account-add"></i> Create Account</a>
+                                </div>
+                              </div>                            
+                            
+                            
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+            </div>
+        </div>

@@ -74,7 +74,7 @@ li {
 }
 
 .section-title p {
-    padding-bottom: 60px;
+    padding-bottom: 30px;
     color: #999;
     font-size: 18px;
     //font-style: italic;
@@ -1521,7 +1521,7 @@ and (min-width : 551px){
 .footer-contact-info {
     color: #fff;
     padding: 20px 30px;
-    margin-top: 80px;
+    margin-top: 40px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -o-border-radius: 3px;

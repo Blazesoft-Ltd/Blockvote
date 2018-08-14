@@ -1,0 +1,17 @@
+.fadeOut{
+  animation : fadeout 800ms linear forwards;
+}
+@keyframes fadeout{
+  99%{
+    opacity : 0;
+    height : initial;
+  }
+  100%{
+    opacity : 0;
+    height : 0px;
+
+
+
+
+  }
+}

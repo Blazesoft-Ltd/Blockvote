@@ -1,0 +1,65 @@
+      <div id="content">
+        <div class="page-head">
+          <h2 class="page-head-title">Polls</h2>
+          <nav aria-label="breadcrumb" role="navigation">
+            <ol class="breadcrumb page-head-nav">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Polls</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="main-content container-fluid">
+          <div class="row">
+            <div id="feedbackMsg" class="col-12"></div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body p-0">
+                  <form action="#" _lpchecked="1">
+                    <div class="form-group row justify-content-between p-4">
+                      <div class="col-4 col-sm-4 col-lg-4">
+                        <div class="input-group input-group-sm" style="max-width: 250px;">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">Quorum: </span>
+                          </div>
+                          <input id="electionQuorum" type="number" class="form-control">
+                          <div class="input-group-append">
+                            <button id="setQuorum" type="button" class="btn btn-primary">Update</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-4 col-sm-4 col-lg-4">
+                        <div class="input-group input-group-sm" style="max-width: 250px;">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">Period: </span>
+                          </div>
+                          <input id="electionPeriod" type="number" class="form-control">
+                          <div class="input-group-append">
+                            <button id="setPeriod" type="button" class="btn btn-primary">Update</button>
+                          </div>
+                        </div>
+                      </div>
+                          <div class="col-4 col-sm-4 col-lg-4 float-right text-right">
+                            <a href="#add-participant" class="btn btn-space btn-success active">
+                              <i class="icon icon-left mdi mdi-plus"></i> Add Participant
+                            </a>
+                            <a href="#add-election" class="btn btn-space btn-primary active">
+                              <i class="icon icon-left mdi mdi-plus"></i> Add Election
+                            </a>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card card-table">
+                  <div class="card-body table-container"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>

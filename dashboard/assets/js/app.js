@@ -17,7 +17,7 @@ var App = (function(my) {
         //imgPath: "img",
         //jsPath: "js",
         //libsPath: "lib",
-        mainContractAddress: "0x8a13b4d8c96c8d6efb07512d9f149733e1971d0f",
+        mainContractAddress: "0x4e78a5c984166d70923cd86Beb48c227758fc9E6",
         network: "ropsten",
         etherscanApi: "https://api-ropsten.etherscan.io/"
     };

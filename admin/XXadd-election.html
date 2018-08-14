@@ -1,0 +1,45 @@
+      <div id="content">
+        <div class="page-head">
+          <h2 class="page-head-title">Add New Poll Wizard</h2>
+          <nav aria-label="breadcrumb" role="navigation">
+            <ol class="breadcrumb page-head-nav">
+              <li class="breadcrumb-item"><a href="#dashboard">Home</a></li>
+              <li class="breadcrumb-item"><a href="#polls">Polls</a></li>
+              <li class="breadcrumb-item active">New Poll</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="main-content container-fluid">
+
+          <div class="row">
+            <div id="feedback" class="col-md-12">
+
+            </div>
+            <div class="col-md-12">
+              <div class="card card-border-color card-border-color-primary">
+                <div class="card-header card-header-divider">Poll Registration<span class="card-subtitle">Fill form below</span></div>
+                <div class="card-body">
+                  <form id="registration-form" data-toggle="validator">
+                    <div class="form-group row">
+                      <label for="title" class="col-12 col-sm-3 col-form-label text-sm-right">Poll Title</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input id="title" pattern="^[_A-z0-9 ]{1,}$" type="text" class="form-control" required>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                    <div class="form-group row pt-3">
+                      <div class="col-sm-12">
+                        <p class="text-right">
+                          <button type="submit" class="btn btn-space btn-primary">Submit</button>
+                          <button class="btn btn-space btn-secondary">Cancel</button>
+                        </p>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>

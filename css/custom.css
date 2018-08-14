@@ -7,7 +7,16 @@ button.disabled:hover {
     cursor: not-allowed;
 }
 
-
 .help-block.with-errors {
-    color: black;
+    color: red;
+}
+
+.col-center {
+    float: none;
+    margin: 0 auto;
+}
+
+.testimonials .testimonial-content p {
+    margin-bottom: 10px;
+    text-decoration: underline;
 }

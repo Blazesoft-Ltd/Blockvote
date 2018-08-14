@@ -75,7 +75,7 @@ window.addEventListener('load', function () {
         "stateMutability": "view"
     }];
 
-    const instituteFactoryAddress = '0x8a13b4d8c96c8d6efb07512d9f149733e1971d0f';
+    const instituteFactoryAddress = '0x4e78a5c984166d70923cd86Beb48c227758fc9E6';
     const instituteContractInstance = web3.eth.contract(instituteContractABI).at(instituteFactoryAddress);
 
     instituteContractInstance.registered_institutions((err, result) => {
@@ -771,6 +771,7 @@ window.addEventListener('load', function () {
         //var title = $('<div class="section-title text-center"></div>');
 
         //  FOR EACH INSTITUTION
+        var electionsCount = 0;
 
         for (var i = 0; i < numInstitutions; i++) {
 
@@ -786,15 +787,13 @@ window.addEventListener('load', function () {
 
                     var callback1 = function (totalElections) {
 
-                        if(totalElections > 0) {
-
-                        $('#feedback .poll-status .alert').html('<strong>Loading..</strong>');                                    
-
-                          var content = $('<div class="row"></div>');
+                        if (totalElections > 0) {
+                            electionsCount++;
+                            var content = $('<div class="row"></div>');
 
                             for (var i = 0; i < totalElections; i++) {
 
-                                    var callback2 = function (electionAddress) {
+                                var callback2 = function (electionAddress) {
                                     var electionInstance = web3.eth.contract(electionABI).at(electionAddress);
 
                                     var callback3 = function (isCandidate) {
@@ -802,13 +801,18 @@ window.addEventListener('load', function () {
 
                                             // header
                                             var rowData = $('<h3></h3>').text(institutionName);
-                                            heading.find('.section-title').html(rowData);
+                                            heading.find('.section-title').html(rowData).append('<br>');
 
                                             electionInstance.election_details((err, electionTitle) => {
-                                                // content
-                                                var item = '<a href="poll.html?eid='+electionAddress+'&iid='+electionFactoryAddress+'"><div class="col-md-4 col-sm-6 col-xs-12"><div class="feature-2"><div class="media"><div class="pull-left"> <i class="fa fa-user-check"></i><div class="border"></div></div><div class="media-body"><h4 class="media-heading">'+electionTitle+'</h4></div></div></div></div></a>';
-                                                content.append(item);
-                                                heading.after(content);
+                                                electionInstance.start_time((err, startBlock) => {
+                                                    web3.eth.getBlockNumber((error, currentBlock) => {
+                                                        var blocks = currentBlock - startBlock;
+                                                        // content
+                                                        var item = '<a href="poll.html?eid=' + electionAddress + '&iid=' + electionFactoryAddress + '"><div class="col-md-4 col-sm-6 col-xs-12"><div class="feature-2"><div class="media"><div class="pull-left"> <i class="fa fa-user-check"></i><div class="border"></div></div><div class="media-body"><h4 class="media-heading">' + electionTitle + '</h4><p>'+getTimeDate(blocks)+'</p></div></div></div></div></a>';
+                                                        content.append(item);
+                                                        heading.after(content);
+                                                    });
+                                                });
                                             });
 
                                         }
@@ -818,7 +822,8 @@ window.addEventListener('load', function () {
                                     isCandy(electionInstance, callback3);
                                 };
                                 electionsHeld(i, electionFactoryInstance, callback2);
-                            }  
+                            }
+                            if(i+1 == numInstitutions && electionsCount < 1) $('#feedback .poll-status').html('<div class="alert alert-info"><strong>Sorry</strong> there is nothing to show here.</div>');
                         }
                     };
                     totalElections(electionFactoryInstance, callback1);
@@ -834,6 +839,16 @@ window.addEventListener('load', function () {
         // END FOR EACH INSTITUTION
 
     });
+
+    function getTimeDate(numBlocks) {
+        var t = new Date();
+        if(numBlocks) t.setSeconds(t.getSeconds() + (numBlocks * 15));
+        //var amPm = t.getHours() >= 12 ? 'PM' : 'AM';
+        //var time = ("0" + t.getHours()).slice(-2) + ":" +("0" + t.getMinutes()).slice(-2) + " " + amPm;
+        var dateTime = t.toLocaleString();
+        return dateTime;
+
+    }
 
 
     function institute(index, callback = '') {
