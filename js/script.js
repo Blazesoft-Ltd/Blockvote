@@ -9,7 +9,6 @@ $(window).load(function () {
 });
 
 
-
 // jQuery for page scrolling feature - requires jQuery Easing plugin
 $(function () {
 
@@ -23,7 +22,6 @@ $(function () {
         event.preventDefault();
     });
 });
-
 
 
 // Highlight the top nav as scrolling occurs

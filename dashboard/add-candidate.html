@@ -19,6 +19,13 @@
                 <div class="card-body">
                   <form id="addCandidateForm" data-toggle="validator">
                     <div class="form-group row">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right">Candidate Name</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input id="candidateName" type="text" placeholder="Candidate's Name" class="form-control" required>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
                       <label for="address" class="col-12 col-sm-3 col-form-label text-sm-right">Candidate Address</label>
                       <div class="col-12 col-sm-8 col-lg-6">
                         <input id="candidateAddress" pattern="(0x)[A-z0-9]{40}" data-error="This Ethereum address is invalid." type="text" placeholder="Candidate's Ether Address" class="form-control" required>

@@ -159,7 +159,7 @@
                         <div class="form-group">
                             <label for="inputPassword">Choice</label>
                             <input type="text" class="form-control" id="inputAddress" pattern="(0x)[A-z0-9]{40}" data-error="This Ethereum address is invalid." placeholder="Enter the address for your choice/candidate" required>
-                            <div class="help-block with-errors"></div>
+                            <p id="candidateName"></p>
                         </div>
                         <button type="submit" class="btn btn-primary">VOTE</button> <button type="button" id="checkResults" class="btn btn-default">Check results</button>
                     </form>
@@ -257,6 +257,9 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="asset/js/bootstrap.min.js"></script>
+    
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/config.js"></script>
 
     <!-- Plugin JavaScript -->
     <script src="js/jquery.easing.1.3.js"></script>
@@ -270,6 +273,10 @@
     <script src="js/jqBootstrapValidation.js"></script>
 
     <!-- Custom Theme JavaScript -->
+    <script type="text/javascript">
+        $.fn.owlCarousel = function() {};
+
+    </script>
     <script src="js/script.js"></script>
 
     <script src="https://m.blazebay.com/assets/js/validator.js"></script>
@@ -295,7 +302,6 @@
             $('.list-btns a[href="' + nextHash + '"]').show().text('Next');
 
         });
-
     </script>
 
 </body>

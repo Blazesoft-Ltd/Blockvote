@@ -1,0 +1,395 @@
+pragma solidity ^0.4.11;
+// written for Solidity version 0.4.18 and above that doesnt break functionality
+contract Election
+{
+    ElectionFactory x;
+    
+    uint public start_time;
+    uint public period;
+    uint public structure_x;
+    bool public ongoing;
+        // an event that is called whenever a Candidate is added so the frontend could
+    // appropriately display the candidate with the right element id (it is used
+    // to vote for the candidate, since it is one of arguments for the function "vote")
+    event AddedCandidate(uint candidateID);
+    // describes a Voter, which has an id and the ID of the candidate they voted for
+ 
+    // describes a Category
+    struct logic_test {
+      string name_position;
+      uint total_candi;
+      address leader;
+      bool leaderWins;
+      mapping(address => bool) voter_profile; 
+     
+      mapping (uint => Candidate) candidates;
+     
+    }
+    
+    uint public registered_categories;
+    
+    mapping(uint => logic_test) public vie_positions;
+    mapping(string => uint) router;
+    mapping(address => uint) public examine;
+    
+   
+ 
+  
+    struct Candidate {
+       
+        uint candidature_key;
+        
+        bool isCandidate; 
+        uint vote_count;
+     
+    }
+   
+    string public election_details;
+    
+  
+
+    modifier is_Admin() {
+        if(msg.sender != x.admin()) revert();
+        _;
+    }
+    
+
+
+    function Election(ElectionFactory Admin, string details) { 
+        
+        x = ElectionFactory(Admin);
+        start_time = block.number + x.quorum();
+        election_details = details;
+      
+        structure_x = x.quorum();
+        ongoing = false;
+        
+    }
+   function addPosition(string define) is_Admin public {
+        
+        vie_positions[registered_categories].name_position = define;
+        router[define] = registered_categories;
+        registered_categories++;
+    }
+        
+   function addCandidate(string vie_post, address candi) is_Admin public {
+        
+        var route = router[vie_post];
+        logic_test y = vie_positions[route];
+        
+        if(y.candidates[y.total_candi].isCandidate != false) revert();
+        examine[candi] = y.total_candi;
+        y.candidates[y.total_candi].isCandidate = true;
+        y.candidates[ y.total_candi].candidature_key = y.total_candi;
+        y.total_candi++;
+    }
+    
+     
+    function vote(string vie_post, address candi) public {
+        if(block.number < start_time) revert();
+        
+        period = block.number + x.period();
+        ongoing = true;
+        
+        bool ww = x.isVoter(msg.sender);
+        
+        if(ww != false) {
+        
+       //if( != true)
+        if(ongoing == true) {
+        
+        var route = router[vie_post];
+        logic_test y = vie_positions[route];
+        
+        uint ii = examine[candi];
+        if(y.candidates[ii].isCandidate == true) {
+        
+        if(y.voter_profile[msg.sender] == false) {
+        
+        var xxx = examine[candi];
+        
+        y.candidates[xxx].vote_count += 1;
+         y.voter_profile[msg.sender] = true;
+         
+        var xx = examine[y.leader];
+        
+        if(y.leader == address(0x0)  || y.candidates[xxx].vote_count > y.candidates[xx].vote_count)
+        {
+            y.leader = candi;
+        }
+        
+        if(y.candidates[xxx].vote_count >= structure_x)
+        {
+            y.leaderWins = true;
+        }
+        }
+        }
+       
+        }
+        }
+
+       else if(block.number >= period)
+        {
+          ongoing = false;   
+        }
+        // voters[voterID] = Voter(msg.sender, true);
+        
+       
+        
+    }
+function candiVotes(string pot, address qq) public constant returns(uint) {
+    var route = router[pot];
+    logic_test y = vie_positions[route];
+    
+    y.leader;
+    uint routed = examine[qq];
+    Candidate ss = y.candidates[routed];
+    
+    return ss.vote_count;
+}
+
+function isCandy(string pot, address qq) public constant returns(bool) {
+    var route = router[pot];
+    logic_test y = vie_positions[route];
+    
+
+    uint routed = examine[qq];
+    Candidate ss = y.candidates[routed];
+    
+    return ss.isCandidate;
+}
+
+function hasVoted(string pot, address qq) public constant returns(bool) {
+    var route = router[pot];
+    logic_test y = vie_positions[route];
+    
+  
+    
+    return  y.voter_profile[qq];
+}
+
+function position(uint i) public constant returns(string z)
+    {
+      z = vie_positions[i].name_position;
+    }
+    
+function total_candi(uint ie) public constant returns(uint i)
+    {
+       i = vie_positions[ie].total_candi;
+    }
+    
+function leader(uint i) public constant returns(address u)
+    {
+      u = vie_positions[i].leader;
+    }
+    
+function leaderWins(uint i) public constant returns(bool g)
+    {
+      g = vie_positions[i].leaderWins;
+    }
+    
+function candidateAddress(uint i, uint k) public constant returns(uint y)
+    {
+     var x = vie_positions[i];
+     y = x.candidates[k].candidature_key;
+     
+    }
+    
+function eligible_candidate(uint i, uint k) public constant returns(bool y)
+    {
+     var x = vie_positions[i];
+     y = x.candidates[k].isCandidate;
+     
+    } 
+    
+function candidate_votes(uint i, uint k) public constant returns(uint y)
+    {
+     var x = vie_positions[i];
+     y = x.candidates[k].vote_count;
+     
+    } 
+    
+function has_Voted(uint i, address k) public constant returns(bool y)
+    {
+     var x = vie_positions[i];
+     y = x.voter_profile[k];
+     
+    } 
+    
+   
+}
+
+
+
+contract ElectionFactory{
+    string public institutioName;
+     uint public total_elections;
+     
+     mapping(uint => address) public elections_held;
+    
+    address public admin;
+    
+  
+    
+
+    // These state variables are used keep track of the number of Candidates/Voters 
+    // and used to as a way to index them     
+  
+    uint public numVoters;
+     
+    uint public quorum;
+    uint public period;
+    
+    // Think of these as a hash table, with the key as a uint and value of 
+    // the struct Candidate/Voter. These mappings will be used in the majority
+    // of our transactions/calls
+    // These mappings will hold all the candidates and Voters respectively
+    
+    struct VoterID{
+        string firstName;
+        string secondName;
+        string surName;
+        uint idNo;
+        uint phoneNo;
+        string emailAddress;
+        bool isVoter;
+        bytes32 profilepicture;
+    }
+    mapping (address => VoterID) public voter;
+    
+    modifier isAdmin() {
+        if(msg.sender != admin) revert();
+        _;
+    }
+    
+   
+    
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     *  These functions perform transactions, editing the mappings *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+     function ElectionFactory(string name, uint minimum_quorum, uint election_period, address is_admin) public
+     {
+         institutioName = name;
+         admin = is_admin;
+         quorum = minimum_quorum;
+         period = election_period;
+         
+     }
+     
+     
+     function addVoter(address Voter_Address, string first_name, string second_name, string surname, uint id, uint phone, string email) isAdmin public {
+       
+       if(voter[Voter_Address].isVoter != false) revert();
+       
+       voter[Voter_Address].isVoter = true;
+       voter[Voter_Address].firstName = first_name;
+       voter[Voter_Address].secondName = second_name;
+       voter[Voter_Address].surName = surname;
+       voter[Voter_Address].idNo = id;
+       voter[Voter_Address].phoneNo = phone;
+       voter[Voter_Address].emailAddress = email;
+       numVoters++;
+    }
+    
+    function setprofilepicture(bytes32 pic) public{
+        
+      if(voter[msg.sender].isVoter != true) revert();
+      voter[msg.sender].profilepicture = pic;
+    }
+    
+    function getprofilepic (address test) public constant returns (bytes32) {
+        return voter[test].profilepicture;
+        
+    }
+    
+    function removeVoter(address Voter_Address) isAdmin public {
+       
+       voter[Voter_Address].isVoter = false;
+       numVoters--;
+    }
+    
+    function isVoter(address test) public constant returns(bool)
+    {
+        return  voter[test].isVoter;
+    }
+    
+    function getFirstName(address test) public constant returns(string)
+    {
+        return  voter[test].firstName;
+    }
+    
+    function getSecondName(address test) public constant returns(string)
+    {
+        return  voter[test].secondName;
+    }
+    
+    function getSurName(address test) public constant returns(string)
+    {
+        return  voter[test].surName;
+    }
+    
+    function getEmail(address test) public constant returns(string)
+    {
+        return  voter[test].emailAddress;
+    }
+    
+    function getID(address test) public constant returns(uint)
+    {
+        return  voter[test].idNo;
+    }
+    
+    function getPhone(address test) public constant returns(uint)
+    {
+        return  voter[test].phoneNo;
+    }
+    
+    function add_Election(string desc) isAdmin {
+    
+      address init_election = new Election(this, desc);
+      
+      if(init_election != address(0x0))
+      {
+           elections_held[total_elections] = init_election;
+           total_elections++;
+      }
+    }
+    
+    function resetQuorum(uint newQuorum) isAdmin public {
+       
+       quorum = newQuorum;
+       
+    }
+    
+    function resetPeriod(uint newPeriod) isAdmin public {
+       
+       period = newPeriod;
+       
+    }
+        function transferAdmin(address newAdmin) isAdmin public{
+            admin = newAdmin;
+        }
+}
+
+
+contract InstitutionFactory{
+    
+     uint public registered_institutions;
+     
+     mapping(uint => address) public institute;
+     
+
+     
+    function add_Institution(string _name, uint minimum_quorum, uint election_period)  {
+    
+      address init_institution = new ElectionFactory(_name, minimum_quorum, election_period, msg.sender);
+      
+      if(init_institution != address(0x0))
+      {
+           institute[registered_institutions] = init_institution;
+           registered_institutions++;
+      }
+      
+    }
+    
+}
+ 
