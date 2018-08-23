@@ -34,6 +34,10 @@ window.addEventListener('load', function () {
 
     instituteContractInstance.registered_institutions((err, result) => {
         var numInstitutions = result.c[0];
+        if(numInstitutions < 1){
+            $('.poll-status').html('<div class="alert alert-info"><strong>Oops!</strong> There is nothing to show here.</div>');
+            return false;
+        }
         console.log('registered institutions', err, numInstitutions);
         var container = $('<div id="pollsList" class="container"></div>');
 
@@ -114,7 +118,6 @@ window.addEventListener('load', function () {
         //var time = ("0" + t.getHours()).slice(-2) + ":" +("0" + t.getMinutes()).slice(-2) + " " + amPm;
         var dateTime = t.toLocaleString();
         return dateTime;
-
     }
 
 

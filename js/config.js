@@ -1,5 +1,5 @@
 const config = {
-    contractAddress: "0xf75f1a423c730aa94ba6d3631de045981caee50c",
+    contractAddress: "0x9523f1f54d054c17400f7d3c5da69797da5dff22",
     // instituteFactory contract
     contractABI: [{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"minimum_quorum","type":"uint256"},{"name":"election_period","type":"uint256"}],"name":"add_Institution","outputs":[],"payable":false,"type":"function","stateMutability":"nonpayable"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"institute","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function","stateMutability":"view"},{"constant":true,"inputs":[],"name":"registered_institutions","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function","stateMutability":"view"}],
     // electionFactory contract
